@@ -39,7 +39,10 @@
                                     {{ $item->title }}
                                 </td>
                                 <td class=" px-6 py-4 whitespace-nowrap text-gray-500">
-                                    {{ $item->slug }}
+                                    <a href="{{ URL::to('/' . $item->slug)}}" target="_blank" +
+                                        class="text-blue-500 underline">
+                                        {{ $item->slug }}
+                                    </a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">
                                     {{ $item->content }}
@@ -66,6 +69,9 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="pt-8">
+            {{ $data->links() }}
         </div>
     </div>
 
@@ -109,6 +115,22 @@
                 @enderror
             </div>
             <input wire:model="content" />
+
+            <div class="mt-4">
+                <label>
+                    <input class="form-checkbox" type="checkbox" value="{{ $isSetToDefaultHomePage }}" +
+                        wire:model="isSetToDefaultHomePage">
+                    <span class="ml-2 text-sm text-gray-600">Set as the default home page</span>
+                </label>
+            </div>
+
+            <div class="mt-4">
+                <label>
+                    <input class="form-checkbox" type="checkbox" value="{{ $isSetToDefaultNotFoundPage }}" +
+                        wire:model="isSetToDefaultNotFoundPage">
+                    <span class="ml-2 text-sm text-red-600">Set as the default 404 page</span>
+                </label>
+            </div>
         </x-slot>
 
         <x-slot name="footer">
@@ -126,5 +148,28 @@
             </x-jet-button>
             @endif
         </x-slot>
+    </x-jet-dialog-modal>
+
+
+    <!-- The Delete Modal -->
+    <x-jet-dialog-modal wire:model="modalConfirmDeleteVisible">
+        <x-slot name="title">
+            {{ __('Delete Page') }}
+        </x-slot>
+
+        <x-slot name="content">
+            {{ __('Are you sure you want to delete this page?') }}
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('modalConfirmDeleteVisible')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-danger-button class="ml-2" wire:click="delete" + wire:loading.attr="disabled">
+                {{ __('Delete') }}
+            </x-jet-danger-button>
+        </x-slot>
+    </x-jet-dialog-modal>
 
 </div>

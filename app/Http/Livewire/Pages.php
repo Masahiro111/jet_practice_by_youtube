@@ -6,7 +6,6 @@ use Livewire\Component;
 use App\Models\Page;
 use Illuminate\Validation\Rule;
 use Livewire\WithPagination;
-use Illuminate\Support\Str;
 
 class Pages extends Component
 {
@@ -30,7 +29,7 @@ class Pages extends Component
     public function updateShowModal($id)
     {
         $this->resetValidation();
-        $this->reset();
+        $this->resetVars();
         $this->modelId = $id;
         $this->modalFormVisible = true;
         $this->loadModel();
@@ -42,39 +41,22 @@ class Pages extends Component
         $this->title = $data->title;
         $this->slug = $data->slug;
         $this->content = $data->content;
-
-        $this->isSetToDefaultHomePage = !$data->is_default_home ? null : true;
-        $this->isSetToDefaultNotFoundPage = !$data->is_default_not_found ? null : true;
     }
 
     public function create()
     {
         $this->validate();
-        $this->unassignDefaultHomePage();
-        $this->unassignDefaultNotFoundPage();
         Page::create($this->modelData());
         $this->modalFormVisible = false;
 
-        $this->reset();
+        $this->resetVars();
     }
 
     public function update()
     {
         $this->validate();
-        $this->unassignDefaultHomePage();
-        $this->unassignDefaultNotFoundPage();
         Page::find($this->modelId)->update($this->modelData());
         $this->modalFormVisible = false;
-    }
-
-    public function updatedIsSetToDefaultHomePage()
-    {
-        $this->isSetToDefaultNotFoundPage = null;
-    }
-
-    public function updatedIsSetToDefaultNotFoundPage()
-    {
-        $this->isSetToDefaultHomePage = null;
     }
 
     public function rules()
@@ -86,18 +68,18 @@ class Pages extends Component
         ];
     }
 
-    // public function resetVars()
-    // {
-    //     $this->modelId = null;
-    //     $this->title = null;
-    //     $this->slug = null;
-    //     $this->content = null;
-    // }
+    public function resetVars()
+    {
+        $this->modelId = null;
+        $this->title = null;
+        $this->slug = null;
+        $this->content = null;
+    }
 
     public function createShowModal()
     {
         $this->resetValidation();
-        $this->reset();
+        $this->resetVars();
         $this->modalFormVisible = true;
     }
 
@@ -112,8 +94,7 @@ class Pages extends Component
 
     public function updatedTitle($value)
     {
-        // $this->generateSlug($value);
-        $this->slug = Str::slug($value);
+        $this->generateSlug($value);
     }
 
     public function delete()
@@ -129,12 +110,12 @@ class Pages extends Component
         $this->modalConfirmDeleteVisible = true;
     }
 
-    // private function generateSlug($value)
-    // {
-    //     $process1 = str_replace(' ', '-', $value);
-    //     $process2 = strtolower($process1);
-    //     $this->slug = $process2;
-    // }
+    private function generateSlug($value)
+    {
+        $process1 = str_replace(' ', '-', $value);
+        $process2 = strtolower($process1);
+        $this->slug = $process2;
+    }
 
     public function read()
     {

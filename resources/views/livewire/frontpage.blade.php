@@ -1,4 +1,3 @@
 <div>
-    <h1>{{ $title }}</h1>
-    <p>{{ $content }}</p>
+    {{-- Nothing in the world is as soft and yielding as water. --}}
 </div>

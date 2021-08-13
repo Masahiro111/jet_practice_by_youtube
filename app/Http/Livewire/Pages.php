@@ -12,19 +12,10 @@ class Pages extends Component
     use WithPagination;
 
     public $modalFormVisible = false;
-    public $modalConfirmDeleteVisible = false;
     public $modelId;
     public $slug;
     public $title;
     public $content;
-
-    public $isSetToDefaultHomePage;
-    public $isSetToDefaultNotFoundPage;
-
-    public function mount()
-    {
-        $this->resetPage();
-    }
 
     public function updateShowModal($id)
     {
@@ -63,7 +54,7 @@ class Pages extends Component
     {
         return [
             'title' => 'requried',
-            'slug' => ['required', Rule::unique('pages', 'slug')->ignore($this->modelId)],
+            'slug' => ['required', Rule::unique('pages', 'slug')],
             'content' => 'requreid',
         ];
     }
@@ -95,19 +86,6 @@ class Pages extends Component
     public function updatedTitle($value)
     {
         $this->generateSlug($value);
-    }
-
-    public function delete()
-    {
-        Page::destroy($this->modelId);
-        $this->modalConfirmDeleteVisible = false;
-        $this->resetPage();
-    }
-
-    public function deleteShowModal($id)
-    {
-        $this->modelId = $id;
-        $this->modalConfirmDeleteVisible = true;
     }
 
     private function generateSlug($value)

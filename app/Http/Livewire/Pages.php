@@ -5,14 +5,57 @@ namespace App\Http\Livewire;
 use App\Models\Page;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Pages extends Component
 {
 
+    use WithPagination;
+
     public $modalFormVisible = false;
+    public $modelId;
     public $slug;
     public $title;
     public $content;
+
+
+    public function createShowModal()
+    {
+        $this->resetValidation();
+        $this->resetVars();
+        $this->modalFormVisible = true;
+    }
+
+    public function updateShowModal($id)
+    {
+        $this->resetValidation();
+        $this->resetVars();
+        $this->modelId = $id;
+        $this->modalFormVisible = true;
+        $this->loadModel();
+    }
+
+    public function loadModel()
+    {
+        $data = Page::find($this->modelId);
+        $this->title = $data->title;
+        $this->slug = $data->slug;
+        $this->content = $data->content;
+    }
+
+    public function modelData()
+    {
+        return [
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'content' => $this->content,
+        ];
+    }
+
+    public function read()
+    {
+        return Page::paginate(5);
+    }
 
     public function create()
     {
@@ -26,6 +69,18 @@ class Pages extends Component
         $this->modalFormVisible = false;
 
         $this->resetVars();
+    }
+
+    public function update()
+    {
+        $this->validate([
+            'title' => 'required',
+            'slug' => ['required', Rule::unique('pages', 'slug')],
+            'content' => 'required',
+        ]);
+
+        Page::find($this->modelId)->update($this->modelData());
+        $this->modalFormVisible = false;
     }
 
     public function updatedTitle($value)
@@ -42,27 +97,16 @@ class Pages extends Component
 
     public function resetVars()
     {
+        $this->modelId = null;
         $this->title = null;
         $this->slug = null;
         $this->content = null;
     }
 
-    public function createShowModal()
-    {
-        $this->modalFormVisible = true;
-    }
-
-    public function modelData()
-    {
-        return [
-            'title' => $this->title,
-            'slug' => $this->slug,
-            'content' => $this->content,
-        ];
-    }
-
     public function render()
     {
-        return view('livewire.pages');
+        return view('livewire.pages', [
+            'data' => $this->read(),
+        ]);
     }
 }

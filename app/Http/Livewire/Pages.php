@@ -13,11 +13,17 @@ class Pages extends Component
     use WithPagination;
 
     public $modalFormVisible = false;
+    public $modalConfirmDeleteVisible = false;
     public $modelId;
     public $slug;
     public $title;
     public $content;
 
+
+    public function mount()
+    {
+        $this->resetPage();
+    }
 
     public function createShowModal()
     {
@@ -61,7 +67,7 @@ class Pages extends Component
     {
         $this->validate([
             'title' => 'required',
-            'slug' => ['required', Rule::unique('pages', 'slug')],
+            'slug' => ['required', Rule::unique('pages', 'slug')->ignore($this->modelId)],
             'content' => 'required',
         ]);
 
@@ -75,12 +81,25 @@ class Pages extends Component
     {
         $this->validate([
             'title' => 'required',
-            'slug' => ['required', Rule::unique('pages', 'slug')],
+            'slug' => ['required', Rule::unique('pages', 'slug')->ignore($this->modelId)],
             'content' => 'required',
         ]);
 
         Page::find($this->modelId)->update($this->modelData());
         $this->modalFormVisible = false;
+    }
+
+    public function delete()
+    {
+        Page::destroy($this->modelId);
+        $this->modalConfirmDeleteVisible = false;
+        $this->resetPage();
+    }
+
+    public function deleteShowModal($id)
+    {
+        $this->modelId = $id;
+        $this->modalConfirmDeleteVisible = true;
     }
 
     public function updatedTitle($value)

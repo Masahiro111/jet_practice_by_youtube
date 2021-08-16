@@ -6,6 +6,7 @@ use App\Models\Page;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class Pages extends Component
 {
@@ -19,6 +20,9 @@ class Pages extends Component
     public $title;
     public $content;
 
+    public $isSetToDefaultHomePage;
+    public $isSetToDefaultNotFoundPage;
+
 
     public function mount()
     {
@@ -28,14 +32,14 @@ class Pages extends Component
     public function createShowModal()
     {
         $this->resetValidation();
-        $this->resetVars();
+        $this->reset();
         $this->modalFormVisible = true;
     }
 
     public function updateShowModal($id)
     {
         $this->resetValidation();
-        $this->resetVars();
+        $this->reset();
         $this->modelId = $id;
         $this->modalFormVisible = true;
         $this->loadModel();
@@ -47,6 +51,9 @@ class Pages extends Component
         $this->title = $data->title;
         $this->slug = $data->slug;
         $this->content = $data->content;
+
+        $this->isSetToDefaultHomePage = !$data->is_default_home ? null : true;
+        $this->isSetToDefaultNotFoundPage = !$data->is_default_not_found ? null : true;
     }
 
     public function modelData()
@@ -71,10 +78,12 @@ class Pages extends Component
             'content' => 'required',
         ]);
 
+        $this->unassignDefaultHomePage();
+        $this->unassignDefaultNotFoundPage();
         Page::create($this->modelData());
         $this->modalFormVisible = false;
 
-        $this->resetVars();
+        $this->reset();
     }
 
     public function update()
@@ -85,6 +94,8 @@ class Pages extends Component
             'content' => 'required',
         ]);
 
+        $this->unassignDefaultHomePage();
+        $this->unassignDefaultNotFoundPage();
         Page::find($this->modelId)->update($this->modelData());
         $this->modalFormVisible = false;
     }
@@ -104,7 +115,36 @@ class Pages extends Component
 
     public function updatedTitle($value)
     {
-        $this->generateSlug($value);
+        // $this->generateSlug($value);
+        $this->slug = Str::slug($value);
+    }
+
+    public function updatedIsSetToDefaultHomePage()
+    {
+        $this->isSetToDefaultNotFoundPage = null;
+    }
+
+    public function updatedIsSetToDefaultNotFoundPage()
+    {
+        $this->isSetToDefaultHomePage = null;
+    }
+
+    private function unassignDefaultHomePage()
+    {
+        if ($this->isSetToDefaultHomePage != null) {
+            Page::where('is_default_home', true)->update([
+                'is_default_home' => false,
+            ]);
+        }
+    }
+
+    private function unassignDefaultNotFoundPage()
+    {
+        if ($this->isSetToDefaultNotFoundPage != null) {
+            Page::where('is_default_not_found', true)->update([
+                'is_default_not_found' => false,
+            ]);
+        }
     }
 
     private function generateSlug($value)

@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Page;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
 <<<<<<< HEAD
 use Livewire\WithPagination;
@@ -13,6 +11,7 @@ use Illuminate\Support\Str;
 
 class Pages extends Component
 {
+<<<<<<< HEAD
 
     public $modalFormVisible = false;
     public $slug;
@@ -159,6 +158,8 @@ class Pages extends Component
         ];
     }
 
+=======
+>>>>>>> parent of 59107ae... finsihed part 1
     public function render()
     {
         return view('livewire.pages');

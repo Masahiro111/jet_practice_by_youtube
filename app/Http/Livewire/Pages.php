@@ -5,20 +5,21 @@ namespace App\Http\Livewire;
 use App\Models\Page;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+<<<<<<< HEAD
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
+=======
+>>>>>>> parent of e36c0c1... save
 
 class Pages extends Component
 {
 
-    use WithPagination;
-
     public $modalFormVisible = false;
-    public $modelId;
     public $slug;
     public $title;
     public $content;
 
+<<<<<<< HEAD
     public $isSetToDefaultHomePage;
     public $isSetToDefaultNotFoundPage;
 
@@ -64,6 +65,8 @@ class Pages extends Component
         return Page::paginate(5);
     }
 
+=======
+>>>>>>> parent of e36c0c1... save
     public function create()
     {
         $this->validate([
@@ -137,16 +140,27 @@ class Pages extends Component
 
     public function resetVars()
     {
-        $this->modelId = null;
         $this->title = null;
         $this->slug = null;
         $this->content = null;
     }
 
+    public function createShowModal()
+    {
+        $this->modalFormVisible = true;
+    }
+
+    public function modelData()
+    {
+        return [
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'content' => $this->content,
+        ];
+    }
+
     public function render()
     {
-        return view('livewire.pages', [
-            'data' => $this->read(),
-        ]);
+        return view('livewire.pages');
     }
 }

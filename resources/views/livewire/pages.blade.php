@@ -143,15 +143,9 @@
                 {{ __('Cancel') }}
             </x-jet-secondary-button>
 
-            @if($modelId)
-            <x-jet-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
-                {{ __('Update') }}
-            </x-jet-button>
-            @else
             <x-jet-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
-                {{ __('Create') }}
+                {{ __('Save') }}
             </x-jet-button>
-            @endif
 
         </x-slot>
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Livewire\Frontpage;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,8 +24,3 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/pages', function () {
     return view('admin.pages');
 })->name('pages');
-
-
-Route::get('/{urlslug}', Frontpage::class);
-
-Route::get('/', Frontpage::class);

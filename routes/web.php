@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SampleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,21 @@ Route::delete('/post/{id}', [PostController::class, 'destroy']);
 
 
 // ---------------------------------------------------------------------
+
+Route::get('/sample', [SampleController::class, 'index']);
+
+Route::get('/sample/create', [SampleController::class, 'create']);
+
+Route::post('/sample', [SampleController::class, 'store']);
+
+Route::get('/sample/{id}/edit', [SampleController::class, 'edit']);
+
+Route::put('/sample/{id}', [SampleController::class, 'update']);
+
+Route::delete('/sample/{id}', [SampleController::class, 'destroy']);
+
+
+// -----------------
 
 Route::get('/crud', [CrudController::class, 'index']);
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CrudController;
+use App\Http\Controllers\HelloController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SampleController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,21 @@ Route::get('/post/{id}/edit', [PostController::class, 'edit']);
 Route::put('/post/{id}', [PostController::class, 'update']);
 
 Route::delete('/post/{id}', [PostController::class, 'destroy']);
+
+
+// ---------------------------------------------------------------------
+
+Route::get('/hello', [HelloController::class, 'index']);
+
+Route::get('/hello/create', [HelloController::class, 'create']);
+
+Route::post('/hello', [HelloController::class, 'store']);
+
+Route::get('/hello/{id}/edit', [HelloController::class, 'edit']);
+
+Route::put('/hello/{id}', [HelloController::class, 'update']);
+
+Route::delete('/hello/{id}', [HelloController::class, 'destroy']);
 
 
 // ---------------------------------------------------------------------
